@@ -1,0 +1,64 @@
+#!/usr/bin/env qiniutest
+
+#为了让一套代码同时可以测试 Stage 环境和 Product 环境，我们推荐将 Host、AK/SK 作为环境变量传入
+#同时也避免了 AK/SK 这样敏感内容进入代码库
+# 环境设置
+#match $(testenv) `env QiniuTestEnv`
+#match $(env) `envdecode QiniuTestEnv_$(testenv)`
+# 认证信息
+#auth qboxtest `qbox $(env.USER) $(env.PWD)`
+#host rs.qiniu.com $(env.RSHost)
+
+# 登录成功
+post http://api.saas_server.com/auth/login
+# 请求头设置
+header App-id 2
+header Version 1.9.9
+header Client-id snowlyg
+header Content-Type application/json
+# 请求 body
+json {"account":"13672478269","password":"a499dacdf07e9f65617157daf942493fa18a3730","salt":"12345"}
+#auth qboxtest
+ret  200
+equal '0' $(resp.body.code)
+equal '"操作成功"' $(resp.body.msg)
+equal '"13672478269"' $(resp.body.data.phone)
+equal '"4"' $(resp.body.data.company_id)
+equal '"测试公司0"' $(resp.body.data.company_name)
+equal '"0"' $(resp.body.data.face)
+equal '"招林"' $(resp.body.data.name)
+equal '"user_12"' $(resp.body.data.push_account)
+equal '"1"' $(resp.body.data.role_id)
+equal '"管理员"' $(resp.body.data.role_name)
+equal '"0"' $(resp.body.data.shop_id)
+equal '""' $(resp.body.data.shop_name)
+equal '"12"' $(resp.body.data.user_id)
+#println $(resp)
+
+# 密码错误
+post http://api.saas_server.com/auth/login
+# 请求头设置
+header App-id 2
+header Version 1.9.9
+header Client-id snowlyg
+header Content-Type application/json
+# 请求 body
+json {"account":"13672478269","password":"a499dacdf07e9f65617157daf942493fa18a37301","salt":"12345"}
+#auth qboxtest
+ret  200
+equal '1004' $(resp.body.code)
+equal '"密码错误"' $(resp.body.msg)
+
+
+# 缺少参数
+post http://api.saas_server.com/auth/login
+# 请求头设置
+header App-id 2
+header Version 1.9.9
+header Client-id snowlyg
+header Content-Type application/json
+# 请求 body
+json {"account":"13672478269","password":"a499dacdf07e9f65617157daf942493fa18a37301"}
+#auth qboxtest
+ret  200
+equal '1001' $(resp.body.code)
