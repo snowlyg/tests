@@ -17,22 +17,22 @@ header Version 1.9.9
 header Client-id snowlyg
 header Content-Type application/json
 # 请求 body
-json {"account":"13672478269","password":"a499dacdf07e9f65617157daf942493fa18a3730","salt":"12345"}
+json {"account":"13544797296","password":"3bf4b73898fc8624b17aef9e9ec8942b29117024","salt":"12345"}
 #auth qboxtest
 ret  200
 equal '0' $(resp.body.code)
 equal '"操作成功"' $(resp.body.msg)
-equal '"13672478269"' $(resp.body.data.phone)
-equal '"4"' $(resp.body.data.company_id)
-equal '"测试公司0"' $(resp.body.data.company_name)
-equal '"0"' $(resp.body.data.face)
-equal '"招林"' $(resp.body.data.name)
-equal '"user_12"' $(resp.body.data.push_account)
+equal '"13544797296"' $(resp.body.data.phone)
+equal '"467"' $(resp.body.data.company_id)
+equal '"小鱼儿企业"' $(resp.body.data.company_name)
+equal '' $(resp.body.data.face)
+equal '"鱼"' $(resp.body.data.name)
+equal '"user_804"' $(resp.body.data.push_account)
 equal '"1"' $(resp.body.data.role_id)
 equal '"管理员"' $(resp.body.data.role_name)
-equal '"0"' $(resp.body.data.shop_id)
-equal '""' $(resp.body.data.shop_name)
-equal '"12"' $(resp.body.data.user_id)
+equal '"489"' $(resp.body.data.shop_id)
+equal '"东城门店"' $(resp.body.data.shop_name)
+equal '"804"' $(resp.body.data.user_id)
 #println $(resp)
 
 # 密码错误
@@ -43,7 +43,7 @@ header Version 1.9.9
 header Client-id snowlyg
 header Content-Type application/json
 # 请求 body
-json {"account":"13672478269","password":"a499dacdf07e9f65617157daf942493fa18a37301","salt":"12345"}
+json {"account":"13544797296","password":"a499dacdf07e9f65617157daf942493fa18a37301","salt":"12345"}
 #auth qboxtest
 ret  200
 equal '1004' $(resp.body.code)
@@ -58,7 +58,7 @@ header Version 1.9.9
 header Client-id snowlyg
 header Content-Type application/json
 # 请求 body
-json {"account":"13672478269","password":"a499dacdf07e9f65617157daf942493fa18a37301"}
+json {"account":"13544797296","password":"3bf4b73898fc8624b17aef9e9ec8942b29117024"}
 #auth qboxtest
 ret  200
 equal '1001' $(resp.body.code)

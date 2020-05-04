@@ -20,7 +20,7 @@ header Version '1.9.9'
 header Client-id 'snowlyg'
 header Content-Type 'application/json'
 # 请求 body
-json '{"account":"13672478269","password":"a499dacdf07e9f65617157daf942493fa18a3730","salt":"12345"}'
+json '{"account":"13544797296","password":"3bf4b73898fc8624b17aef9e9ec8942b29117024","salt":"12345"}'
 #auth qboxtest
 ret  200
 # 赋值认证 code
@@ -29,7 +29,7 @@ match $(auth_code) $(resp.body.data.auth)
 case testCase1
 
 # 上传签名图片 不上传到七牛云
-post http://api.saas_server.com/sell/signWithImgBase64?debug=1
+post http://api.saas_server.com/sell/signWithImgBase64
 # 请求头设置
 header App-id '2'
 header Version '1.9.9'
@@ -37,7 +37,7 @@ header Client-id 'snowlyg'
 header Content-Type 'application/json'
 header Auth $(auth_code)
 # 请求 body
-json '{"image_base64":$(image_base64),"is_qiniuyun":"0"}'
+json '{"image_base64":$(image_base64),"is_qiniuyun":"0","sell_id":"15802"}'
 ret  200
 equal '0' $(resp.body.code)
 equal '"操作成功"' $(resp.body.msg)
@@ -45,23 +45,7 @@ equal '"操作成功"' $(resp.body.msg)
 case testCase2
 
 # 上传签名图片 上传到七牛云
-#post http://api.saas_server.com/sell/signWithImgBase64?debug=1
-## 请求头设置
-#header App-id '2'
-#header Version '1.9.9'
-#header Client-id 'snowlyg'
-#header Content-Type 'application/json'
-#header Auth $(auth_code)
-## 请求 body
-#json '{"image_base64":$(image_base64),"is_qiniuyun":"1"}'
-#ret  200
-#equal '0' $(resp.body.code)
-#equal '"操作成功"' $(resp.body.msg)
-
-case testCase3
-
-# 上传签名图片 签名数据为空
-post http://api.saas_server.com/sell/signWithImgBase64?debug=1
+post http://api.saas_server.com/sell/signWithImgBase64
 # 请求头设置
 header App-id '2'
 header Version '1.9.9'
@@ -69,7 +53,23 @@ header Client-id 'snowlyg'
 header Content-Type 'application/json'
 header Auth $(auth_code)
 # 请求 body
-json '{"is_qiniuyun":"0"}'
+json '{"image_base64":$(image_base64),"is_qiniuyun":"1","sell_id":"15802"}'
+ret  200
+equal '0' $(resp.body.code)
+equal '"操作成功"' $(resp.body.msg)
+
+case testCase3
+
+# 上传签名图片 签名数据为空
+post http://api.saas_server.com/sell/signWithImgBase64
+# 请求头设置
+header App-id '2'
+header Version '1.9.9'
+header Client-id 'snowlyg'
+header Content-Type 'application/json'
+header Auth $(auth_code)
+# 请求 body
+json '{"is_qiniuyun":"0","sell_id":"15802"}'
 ret  200
 equal '121' $(resp.body.code)
 equal '"图片参数错误：base64数据为空"' $(resp.body.msg)
@@ -77,7 +77,7 @@ equal '"图片参数错误：base64数据为空"' $(resp.body.msg)
 case testCase4
 
 # 上传签名图片 签名数据错误
-post http://api.saas_server.com/sell/signWithImgBase64?debug=1
+post http://api.saas_server.com/sell/signWithImgBase64
 # 请求头设置
 header App-id '2'
 header Version '1.9.9'
@@ -85,7 +85,7 @@ header Client-id 'snowlyg'
 header Content-Type 'application/json'
 header Auth $(auth_code)
 # 请求 body
-json '{"image_base64":"dsfsd","is_qiniuyun":"0"}'
+json '{"image_base64":"dsfsd","is_qiniuyun":"0","sell_id":"15802"}'
 ret  200
 equal '121' $(resp.body.code)
 equal '"图片base64数据错误"' $(resp.body.msg)
