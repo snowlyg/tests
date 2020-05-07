@@ -44,19 +44,19 @@ equal '"操作成功"' $(resp.body.msg)
 
 case testCase2
 
-# 上传签名图片 上传到七牛云
-post http://api.saas_server.com/sell/signWithImgBase64
-# 请求头设置
-header App-id '2'
-header Version '1.9.9'
-header Client-id 'snowlyg'
-header Content-Type 'application/json'
-header Auth $(auth_code)
-# 请求 body
-json '{"image_base64":$(image_base64),"is_qiniuyun":"1","sell_id":"15802"}'
-ret  200
-equal '0' $(resp.body.code)
-equal '"操作成功"' $(resp.body.msg)
+# 上传签名图片 上传到七牛云，因为会在七牛云产生测试数据，所有只有需要测试的时候才解开
+#post http://api.saas_server.com/sell/signWithImgBase64
+## 请求头设置
+#header App-id '2'
+#header Version '1.9.9'
+#header Client-id 'snowlyg'
+#header Content-Type 'application/json'
+#header Auth $(auth_code)
+## 请求 body
+#json '{"image_base64":$(image_base64),"is_qiniuyun":"1","sell_id":"15802"}'
+#ret  200
+#equal '0' $(resp.body.code)
+#equal '"操作成功"' $(resp.body.msg)
 
 case testCase3
 
@@ -71,7 +71,7 @@ header Auth $(auth_code)
 # 请求 body
 json '{"is_qiniuyun":"0","sell_id":"15802"}'
 ret  200
-equal '121' $(resp.body.code)
+equal '122' $(resp.body.code)
 equal '"图片参数错误：base64数据为空"' $(resp.body.msg)
 
 case testCase4
@@ -89,6 +89,22 @@ json '{"image_base64":"dsfsd","is_qiniuyun":"0","sell_id":"15802"}'
 ret  200
 equal '121' $(resp.body.code)
 equal '"图片base64数据错误"' $(resp.body.msg)
+
+case testCase5
+
+# 上传签名图片 销售单不存在
+post http://api.saas_server.com/sell/signWithImgBase64
+# 请求头设置
+header App-id '2'
+header Version '1.9.9'
+header Client-id 'snowlyg'
+header Content-Type 'application/json'
+header Auth $(auth_code)
+# 请求 body
+json '{"image_base64":$(image_base64),"is_qiniuyun":"0","sell_id":"158021"}'
+ret  200
+equal '123' $(resp.body.code)
+equal '"参数错误，销售单不存在"' $(resp.body.msg)
 
 tearDown
 clear image_base64 auth_code
